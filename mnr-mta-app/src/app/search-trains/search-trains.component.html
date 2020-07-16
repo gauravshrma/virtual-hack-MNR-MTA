@@ -1,0 +1,56 @@
+<div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <div fxLayout="row wrap" fxFlex="100" class="display-panel">
+        <h3>MTA LIRR Train Schedule</h3>
+        <mat-card style="width: 100%;">
+            <mat-card-content>
+                <div fxLayout="column" fxLayoutGap="10px" style="width: 100%;">
+                    <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
+                        <div fxLayout="column" fxFlex="80">
+                            <mat-form-field class="full-width">
+                                <input type="text"
+                                    placeholder="From"
+                                    aria-label="From Station"
+                                    matInput
+                                    [formControl]="from"
+                                    [matAutocomplete]="autoFrom">
+                                <mat-autocomplete autoActiveFirstOption #autoFrom="matAutocomplete">
+                                    <mat-option *ngFor="let option of fromFilteredStations | async" [value]="option">
+                                        {{option}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                            <mat-form-field class="full-width">
+                                <input type="text"
+                                    placeholder="To"
+                                    aria-label="To Station"
+                                    matInput
+                                    [formControl]="to"
+                                    [matAutocomplete]="autoTo">
+                                <mat-autocomplete autoActiveFirstOption #autoTo="matAutocomplete">
+                                    <mat-option *ngFor="let option of toFilteredStations | async" [value]="option">
+                                        {{option}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                        <button mat-icon-button type="button" (click)="swap()">
+                            <mat-icon aria-hidden="false" aria-label="Swap icon">swap_vert</mat-icon>
+                        </button>
+                    </div>
+                    <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
+                        <p-calendar class="full-width"
+                            showIcon="true"
+                            placeholder="Depart At"
+                            [(ngModel)]="date"
+                            showTime="true"
+                            hourFormat="12" 
+                            [minDate]="minDate"></p-calendar>
+                        <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">Go</button>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <mat-progress-bar *ngIf="loader" mode="indeterminate"></mat-progress-bar>
+    </div>
+    <app-train-list *ngIf="displayResults" [trains]="trains" style="width: 100%;"></app-train-list>
+</div>

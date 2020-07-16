@@ -1,0 +1,9 @@
+<div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <mat-card *ngFor="let train of trains" class="display-panel" matRipple (click)="selectTrain(train)">
+        <mat-card-content fxLayout="column" fxLayoutGap="10px" style="width: 100%;">
+            <p>{{train.name}}</p>
+            <p>{{train.startTime}} - {{train.endTime}}</p>
+            <p>{{train.originStation}}</p>
+        </mat-card-content>
+    </mat-card>
+</div>

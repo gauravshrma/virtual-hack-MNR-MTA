@@ -1,0 +1,12 @@
+<div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <mat-card class="display-panel" matRipple>
+        <mat-card-content fxLayout="column" fxLayoutGap="10px" style="width: 100%;">
+            <p>{{train.name}}</p>
+            <p>{{train.startTime}} - {{train.endTime}}</p>
+            <p>{{train.originStation}}</p>
+        </mat-card-content>
+        <div fxFlex="100" fxLayoutAlign="end center">
+            <button mat-raised-button color="warn" routerLink="/">Back</button>
+        </div>
+    </mat-card>
+</div>
