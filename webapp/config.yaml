@@ -1,0 +1,7 @@
+[url]
+api_key = 9de8f3b1-1701-4229-8ebc-346914043f4a
+traintime_stations_url = https://mnorthstg.prod.acquia-sites.com/wse/Stations/v4
+traintime_train_url = https://mnorthstg.prod.acquia-sites.com/wse/trains/v4
+traintime_station_url = https://mnorthstg.prod.acquia-sites.com/wse/Stations/v4
+traintime_mymta_train_url = https://mnorthstg.prod.acquia-sites.com/wse/MYmta/Trains/v4
+mymnr_train_details_url = https://mnorthstg.prod.acquia-sites.com/wse/Mymnr/v5/api/train/
