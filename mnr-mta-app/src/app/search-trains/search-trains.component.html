@@ -18,6 +18,9 @@
                                         {{option}}
                                     </mat-option>
                                 </mat-autocomplete>
+                                <button mat-button *ngIf="from" matSuffix mat-icon-button aria-label="Clear" (click)="from.setValue(null)">
+                                <mat-icon>close</mat-icon>
+                                </button>
                             </mat-form-field>
                             <mat-form-field class="full-width">
                                 <input type="text"
@@ -31,6 +34,9 @@
                                         {{option}}
                                     </mat-option>
                                 </mat-autocomplete>
+                                <button mat-button *ngIf="to" matSuffix mat-icon-button aria-label="Clear" (click)="to.setValue(null)">
+                                <mat-icon>close</mat-icon>
+                                </button>
                             </mat-form-field>
                         </div>
                         <button mat-icon-button type="button" (click)="swap()">
