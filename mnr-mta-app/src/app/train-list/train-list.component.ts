@@ -10,7 +10,11 @@ import { TrainService } from '../service/train.service';
 })
 export class TrainListComponent implements OnInit {
 
-  @Input() trains: Array<TrainDetail>
+  @Input() trains: Array<any>
+
+  @Input() toStation: string
+
+  // @Input() trains: Array<TrainDetail>
 
   constructor(private router: Router,
     private service: TrainService) { }
@@ -18,7 +22,30 @@ export class TrainListComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  selectTrain(train: TrainDetail) {
+  getTrack(train: TrainDetail): string {
+    let track = train.Track;
+    if(!track || track.trim().length == 0) {
+      track = train.TrackConn1;
+      if(!track || track.trim().length == 0) {
+        track = train.TrackConn2;
+      }
+    }
+
+    if(track && track.trim().length > 0) {
+      return track;
+    }
+    return "NA";
+  }
+
+  getDepartureTime(train: TrainDetail): string {
+    let dep: string = train.OriginETA;
+    if (dep && (dep.indexOf('PM') > 0 || dep.indexOf('AM') > 0)) {
+      return dep;
+    }
+    return 'NA';
+  }
+
+  selectTrain(train: any) {
     console.log(train);
     this.service.train = train;
     this.router.navigate(['/train-detail']);

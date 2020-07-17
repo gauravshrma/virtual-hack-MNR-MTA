@@ -15,6 +15,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRippleModule } from '@angular/material/core';
 import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import {  MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { CalendarModule } from 'primeng/calendar';
 import { SearchTrainsComponent } from './search-trains/search-trains.component';
 import { TrainListComponent } from './train-list/train-list.component';
@@ -44,7 +46,9 @@ import { TrainDetailComponent } from './train-detail/train-detail.component';
     MatInputModule,
     MatProgressBarModule,
     MatRippleModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatToolbarModule,
+    MatProgressSpinnerModule
   ],
   providers: [ TrainService,
     {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}} ],

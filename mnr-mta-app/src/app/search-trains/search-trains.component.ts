@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Observable, empty } from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
-import { TrainDetail } from '../common/model';
+import {map, startWith, finalize} from 'rxjs/operators';
+import { TrainDetail, TrainRequest } from '../common/model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TrainService } from '../service/train.service';
 
 @Component({
   selector: 'app-search-trains',
@@ -23,14 +24,22 @@ export class SearchTrainsComponent implements OnInit {
   public maxDate: Date;
   public loader: boolean;
   public displayResults: boolean;
-  public trains: Array<TrainDetail>
+  public trains: Array<any>;
+  public request: TrainRequest;
 
-  constructor(private snackBar: MatSnackBar) { }
+  constructor(private snackBar: MatSnackBar,
+    private service: TrainService) { }
 
   ngOnInit(): void {
     this.initializeForm();
     this.minDate = new Date();
-    this.stations = ['Stony Brook', 'New York', 'Las Vegas', 'Los Angeles', 'San Fransisco'];
+  //   this.stations = ['Campbell Hall', 'Harriman', 'Middletown', 'Otisville', 'Port', 'Salisbury', 'Sloatsburg', 'Suffern', 
+  // 'Tuxedo'];
+    this.service.stations$.subscribe(
+      response => {
+        this.stations = response;
+      }
+    )
     this.fromFilteredStations = this.from.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value))
@@ -39,6 +48,19 @@ export class SearchTrainsComponent implements OnInit {
       startWith(''),
       map(value => this._filter(value))
     );
+    if (this.service.fromStation) {
+      this.from.setValue(this.service.fromStation);
+    }
+    if (this.service.toStation) {
+      this.to.setValue(this.service.toStation);
+    }
+    if (this.service.date) {
+      this.date = this.service.date;
+    }
+    if (this.service.trains) {
+      this.trains = this.service.trains;
+      this.displayResults = true;
+    }
   }
 
   private _filter(value: string): string[] {
@@ -65,7 +87,7 @@ export class SearchTrainsComponent implements OnInit {
   }
 
   onSubmit() {
-    const fromStation = this.from.value;
+    const fromStation: string = this.from.value;
     const toStation = this.to.value;
     const time = this.date;
 
@@ -95,24 +117,34 @@ export class SearchTrainsComponent implements OnInit {
     }
     else {
       console.log('Valid Form Data');
+      this.service.fromStation = fromStation;
+      this.service.toStation = toStation;
+      this.service.date = this.date;
       this.loader = true;
-      setTimeout(() => {
-        this.trains = new Array();
-        let train: TrainDetail = new TrainDetail();
-        train.name = 'Ronkonkoma';
-        train.startTime = '11:30 AM';
-        train.endTime = '12:30 PM';
-        train.originStation = 'Penn Station';
-        this.trains.push(train);
-        train = new TrainDetail();
-        train.name = 'Port Jefferson';
-        train.startTime = '11:45 AM';
-        train.endTime = '1:00 PM';
-        train.originStation = 'Jamaica';
-        this.trains.push(train);
-        this.loader = false;
-        this.displayResults = true;
-      }, 2000);
+
+      this.request = new TrainRequest();
+      this.request.origin = fromStation;
+      this.request.dest = toStation;
+      this.request.day = '' + time.getDate();
+      this.request.month = '' + (time.getMonth() + 1);
+      this.request.year = '' + time.getFullYear();
+
+      this.service.searchTrains(this.request).pipe(
+        finalize(() => {
+          this.loader = false;
+          this.displayResults = true;
+          this.service.trains = this.trains;
+        })
+      )
+      .subscribe(
+        response => {
+          this.trains = response.trains_list;
+          console.log(this.trains);
+        }, error => {
+          console.error(error);
+          this.snackBar.open('No trains available at this time', 'OK');
+        }
+      );
     }
   }
 

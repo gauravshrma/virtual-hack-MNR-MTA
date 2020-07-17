@@ -1,12 +1,25 @@
-<div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="10px">
-    <mat-card class="display-panel" matRipple>
-        <mat-card-content fxLayout="column" fxLayoutGap="10px" style="width: 100%;">
-            <p>{{train.name}}</p>
-            <p>{{train.startTime}} - {{train.endTime}}</p>
-            <p>{{train.originStation}}</p>
-        </mat-card-content>
-        <div fxFlex="100" fxLayoutAlign="end center">
-            <button mat-raised-button color="warn" routerLink="/">Back</button>
+<mat-toolbar class="mat-elevation-z6" color="primary">
+    <button mat-icon-button class="example-icon" aria-label="Back" routerLink="/">
+      <mat-icon>navigate_before</mat-icon>
+    </button>
+    <span>Train {{train.TrainName}} Risk Predictor</span>
+</mat-toolbar>
+<div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="10px" style="height: 90vh;">
+    <ng-container *ngIf="loader; then spinner else cards"></ng-container>
+    <ng-template #spinner>
+        <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center" style="width: 100%;">
+            <mat-spinner></mat-spinner>
         </div>
-    </mat-card>
+    </ng-template>
+    <ng-template #cards>
+        <mat-card class="display-panel" *ngFor="let car of cars; let i=index">
+            <mat-card-content fxLayout="row" fxLayoutAlign="space-between center" style="width: 100%;">
+                <span>Car {{i+1}}</span>
+                <mat-progress-bar *ngIf="car > '0'" mode="determinate" [value]="(+car)*100" style="width: 50%;"></mat-progress-bar>
+                <span *ngIf="car <= '0.33'" style="color:green;">Low Risk</span>
+                <span *ngIf="car > '0.33' && car <= '0.67'" style="color:orange;">Moderate Risk</span>
+                <span *ngIf="car > '0.67'" style="color:red;">High Risk</span>
+            </mat-card-content>
+        </mat-card>
+    </ng-template>
 </div>
