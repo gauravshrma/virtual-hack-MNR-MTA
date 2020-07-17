@@ -1,0 +1,23 @@
+<div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="10px" class="train-list">
+    <mat-card *ngFor="let train of trains;" class="display-panel" matRipple (click)="selectTrain(train)">
+        <mat-card-content fxLayout="column" fxLayoutGap="10px" style="width: 100%;">
+            <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
+                <h3><b>{{train.TrainName}}</b></h3>
+                <p>Track: {{getTrack(train)}}</p>
+            </div>
+            <div fxFlex="100" fxLayout="row" fxLayoutAlign="space-between center">
+                <div fxLayout="column">
+                    <p>{{train.Origin}}</p>
+                    <p><b>Dep:</b> {{getDepartureTime(train)}}</p>
+                </div>
+                <div fxLayout="column">
+                    <mat-icon aria-hidden="false" aria-label="More Stations icon">multiple_stop</mat-icon>
+                </div>
+                <div fxLayout="column">
+                    <p>{{train.Destination}}</p>
+                    <p><b>Arr:</b> {{train.DestinationTime}}</p>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
